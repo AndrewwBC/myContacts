@@ -26,8 +26,11 @@ export const InputSearchContainer = styled.div`
 export const Header = styled.header`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray[100]};
+  justify-content: ${({ hasError }) =>
+    hasError ? "flex-end" : "space-between"};
   margin-top: 32px;
+  padding-bottom: 16px;
   strong {
     color: #222;
     font-size: 24px;
@@ -48,22 +51,25 @@ export const Header = styled.header`
   }
 `;
 
-export const ListContainer = styled.div`
+export const ListHeader = styled.header`
   margin-top: 24px;
+  margin-bottom: 8px;
 
-  header {
-    margin-bottom: 8px;
-    button {
-      background: transparent;
-      border: none;
-      display: flex;
-      align-items: center;
+  img {
+    transform: ${({ orderby }) => (orderby === "asc" ? "rotate(180deg)" : "")};
+    transition: all 0.3s ease-in;
+  }
 
-      span {
-        margin-right: 8px;
-        font-weight: bold;
-        color: ${({ theme }) => theme.colors.primary.main};
-      }
+  button {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-right: 8px;
+      font-weight: bold;
+      color: ${({ theme }) => theme.colors.primary.main};
     }
   }
 `;
@@ -111,6 +117,31 @@ export const Card = styled.div`
       background: transparent;
       border: none;
       margin-left: 8px;
+    }
+  }
+`;
+
+export const ErrorContainer = styled.div`
+  margin-top: 16px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    span {
+      color: ${({ theme }) => theme.colors.danger.main};
+      font-size: 22px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    button {
+      max-width: max-content;
     }
   }
 `;

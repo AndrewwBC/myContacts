@@ -1,7 +1,15 @@
 import { Overlay } from "./styles";
 import ReactDOM from "react-dom";
 
-export default function Loader() {
+interface LoaderProps {
+  isLoading: boolean;
+}
+
+export default function Loader({ isLoading }: LoaderProps) {
+  if (!isLoading) {
+    return null;
+  }
+
   return ReactDOM.createPortal(
     <Overlay>
       <div className="loader"></div>
