@@ -6,12 +6,16 @@ import {
   InputSearchContainer,
   ListHeader,
   ErrorContainer,
+  EmptyListContainer,
+  SearchNotFoundContainer,
 } from "../../pages/Home/styles";
 
 import arrow from "../../assets/images/icons/arrow.svg";
 import edit from "../../assets/images/icons/edit.svg";
 import trash from "../../assets/images/icons/trash.svg";
 import sad from "../../assets/images/icons/sad.svg";
+import emptyBox from "../../assets/images/icons/emptyBox.svg";
+import magnifierQuestion from "../../assets/images/icons/magnifierQuestion.svg";
 
 import Loader from "../../components/Loader";
 import { useEffect, useState, ChangeEvent, useMemo, useCallback } from "react";
@@ -79,16 +83,26 @@ export default function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
-      <InputSearchContainer>
-        <input
-          type="text"
-          placeholder="Pesquise pelo nome"
-          onChange={handleChangeSearchTerm}
-        />
-      </InputSearchContainer>
+      {!hasError && contacts.length > 0 && (
+        <InputSearchContainer>
+          <input
+            type="text"
+            placeholder="Pesquise pelo nome"
+            onChange={handleChangeSearchTerm}
+          />
+        </InputSearchContainer>
+      )}
 
-      <Header hasError={hasError}>
-        {!hasError && (
+      <Header
+        justifyContent={
+          hasError
+            ? "flex-end"
+            : contacts.length > 0
+            ? "space-between"
+            : "center"
+        }
+      >
+        {!hasError && contacts.length > 0 && (
           <strong>
             {filteredContacts.length}
             {filteredContacts.length === 1 ? " Contato" : " Contatos"}
@@ -110,6 +124,28 @@ export default function Home() {
 
       {!hasError && (
         <>
+          {contacts.length < 1 && !isLoading && (
+            <EmptyListContainer>
+              <img src={emptyBox} alt="Empty Box" />
+
+              <p>
+                Você ainda não tem nenhum contato cadastrado! Clique no botão
+                <strong>"Novo contato"</strong> acima para cadastrar o seu
+                primeiro!
+              </p>
+            </EmptyListContainer>
+          )}
+
+          {contacts.length > 0 && filteredContacts.length < 1 && searchTerm && (
+            <SearchNotFoundContainer>
+              <img src={magnifierQuestion} alt="Magnifier Question" />
+
+              <span>
+                Nenhum resultado para <strong>"{searchTerm}"</strong>
+              </span>
+            </SearchNotFoundContainer>
+          )}
+
           {filteredContacts.length > 0 && (
             <ListHeader orderby={orderBy}>
               <button

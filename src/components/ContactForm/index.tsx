@@ -1,7 +1,8 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import isEmailValid from "../../utils/isEmailValid.tsx";
 import useErrors from "../../hooks/useErrors.tsx";
+import CategoryService from "../../services/CategoryService.tsx";
 
 import { ButtonContainer, Form } from "./styles";
 
@@ -15,6 +16,11 @@ interface ContactFormProps {
   buttonLabel: string;
 }
 
+interface CategoryProps {
+  id: string;
+  name: string;
+}
+
 interface ErrorTypes {
   field?: string;
   message?: string;
@@ -23,7 +29,25 @@ export default function ContactForm({ buttonLabel }: ContactFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  async function getCategories() {
+    try {
+      setIsLoadingCategories(true);
+      const categoriesList = await CategoryService.listCategories();
+
+      setCategories(categoriesList);
+    } catch (err) {
+    } finally {
+      setIsLoadingCategories(false);
+    }
+  }
 
   const { errors, setError, removeError, getErrorMessageByFieldName } =
     useErrors();
@@ -94,14 +118,22 @@ export default function ContactForm({ buttonLabel }: ContactFormProps) {
         />
       </FormGroup>
 
-      <FormGroup>
+      <FormGroup isLoading={isLoadingCategories}>
         <Select
-          value={category}
-          onChange={({ target }) => setCategory(target.value)}
+          value={categoryId}
+          disabled={isLoadingCategories}
+          onChange={({ target }) => setCategoryId(target.value)}
         >
-          <option value="">Categoria</option>
-          <option value="instagram">Instagram</option>
-          <option value="discord">Discord</option>
+          {isLoadingCategories ? (
+            <option value="">Carregando Categorias </option>
+          ) : (
+            <option value="">Selecione</option>
+          )}
+          {categories.map((category: CategoryProps) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
         </Select>
       </FormGroup>
 
