@@ -14,6 +14,7 @@ import formatPhone from "../../utils/formatPhone.tsx";
 
 interface ContactFormProps {
   buttonLabel: string;
+  onSubmit: Function;
 }
 
 interface CategoryProps {
@@ -25,7 +26,10 @@ interface ErrorTypes {
   field?: string;
   message?: string;
 }
-export default function ContactForm({ buttonLabel }: ContactFormProps) {
+export default function ContactForm({
+  buttonLabel,
+  onSubmit,
+}: ContactFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -78,14 +82,10 @@ export default function ContactForm({ buttonLabel }: ContactFormProps) {
     setPhone(formatPhone(event.target.value));
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    console.log({
-      name,
-      email,
-      phone,
-      category,
-    });
+  function handleSubmit(event: FormEvent) {
+    event?.preventDefault();
+
+    onSubmit({ name, email, phone, categoryId });
   }
 
   return (
