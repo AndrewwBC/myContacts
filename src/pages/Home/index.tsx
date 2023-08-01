@@ -93,21 +93,14 @@ export default function Home() {
         </InputSearchContainer>
       )}
 
-      <Header
-        justifyContent={
-          hasError
-            ? "flex-end"
-            : contacts.length > 0
-            ? "space-between"
-            : "center"
-        }
-      >
+      <Header display={hasError ? "none" : "flex"}>
         {!hasError && contacts.length > 0 && (
           <strong>
             {filteredContacts.length}
             {filteredContacts.length === 1 ? " Contato" : " Contatos"}
           </strong>
         )}
+        <Link to="/categories">Categorias</Link>
         <Link to="/new">Novo Contato</Link>
       </Header>
 

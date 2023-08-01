@@ -36,6 +36,7 @@ export default function ContactForm({
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     getCategories();
@@ -82,10 +83,14 @@ export default function ContactForm({
     setPhone(formatPhone(event.target.value));
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event?.preventDefault();
 
-    onSubmit({ name, email, phone, categoryId });
+    setIsSubmitting(true);
+
+    await onSubmit({ name, email, phone, categoryId });
+
+    setIsSubmitting(false);
   }
 
   return (
@@ -96,6 +101,7 @@ export default function ContactForm({
           placeholder="Nome *"
           value={name}
           onChange={handleNameChange}
+          disabled={isSubmitting}
         />
       </FormGroup>
 
@@ -106,6 +112,7 @@ export default function ContactForm({
           placeholder="E-mail"
           value={email}
           onChange={handleEmailChange}
+          disabled={isSubmitting}
         />
       </FormGroup>
 
@@ -115,6 +122,7 @@ export default function ContactForm({
           value={phone}
           onChange={handlePhoneChange}
           maxLength={15}
+          disabled={isSubmitting}
         />
       </FormGroup>
 
@@ -123,6 +131,7 @@ export default function ContactForm({
           value={categoryId}
           disabled={isLoadingCategories}
           onChange={({ target }) => setCategoryId(target.value)}
+          disabled={isLoadingCategories || isSubmitting}
         >
           {isLoadingCategories ? (
             <option value="">Carregando Categorias </option>
@@ -138,7 +147,7 @@ export default function ContactForm({
       </FormGroup>
 
       <ButtonContainer>
-        <Button disabled={!isFormValid} type="submit">
+        <Button disabled={!isFormValid} isLoading={isSubmitting} type="submit">
           {buttonLabel}
         </Button>
       </ButtonContainer>

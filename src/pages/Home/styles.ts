@@ -24,10 +24,10 @@ export const InputSearchContainer = styled.div`
   }
 `;
 export const Header = styled.header`
-  display: flex;
+  display: ${({ display }) => display};
   align-items: center;
   border-bottom: 2px solid ${({ theme }) => theme.colors.gray[100]};
-  justify-content: ${({ justifyContent }) => justifyContent};
+  justify-content: space-between;
   margin-top: 32px;
   padding-bottom: 16px;
   strong {

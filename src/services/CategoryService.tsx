@@ -1,14 +1,20 @@
 import HttpClient from "./utils/HttpClient";
 
 class CategoryService {
-  public httpClient;
+  private httpClient;
 
   constructor() {
     this.httpClient = new HttpClient("http://localhost:3001");
   }
 
-  async listCategories() {
-    return this.httpClient.get(`/categories`);
+  async listCategories(orderBy: string) {
+    return this.httpClient.get(`/categories?orderBy=${orderBy}`);
+  }
+
+  async createCategorie(categorie: any) {
+    return this.httpClient.post(`/categories`, {
+      body: categorie,
+    });
   }
 }
 
