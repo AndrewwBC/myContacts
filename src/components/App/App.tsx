@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
-        {/* <ToastContainer /> */}
+        <ToastContainer />
         <Container>
           <Header />
           <Routes />
