@@ -2,7 +2,7 @@ import HttpClient from "./utils/HttpClient";
 
 class CategoryService {
   private httpClient;
-
+  //espelho do category controller
   constructor() {
     this.httpClient = new HttpClient("http://localhost:3001");
   }
